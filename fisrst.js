@@ -87,7 +87,13 @@ async function handlerBook(input) {
     if (typeof input === "number") {
         try {
         const data = await getAutorBooks(urlFantlab, input)
-        console.log(data.works_blocks)    
+          //console.log(data)
+        console.log("Романы: \n") 
+        //console.log(data.works_blocks[6].list[1])
+        data.works_blocks[6].list.forEach((value, index) => {
+            console.log(`${index+1}. ${value.work_name}`)
+            console.log(`Рейтинг: ${value.rating.rating}\nГод: ${value.work_year}`)
+        })
         } catch (error) {
             console.error(error)
         }
