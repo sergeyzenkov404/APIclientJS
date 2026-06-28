@@ -49,12 +49,17 @@ async function searchAutorsFantlab(url, name) {
 }
 
 async function getAutorInfo(url, id) {
- //   const resp = await fetch(url+`/autors/${id}?biography&biblio_blocks?sort=year`)
-       const resp = await fetch(url+`/autor/${id}`)
+   const resp = await fetch(url+`/autor/${id}?biography=${id}`)
+      // const resp = await fetch(url+`/autor/${id}`)
    
     return await resp.json();
 }
-
+async function getAutorBooks(url, id) {
+   const resp = await fetch(url+`/autor/${id}?biblio_blocks=${id}`)
+      // const resp = await fetch(url+`/autor/${id}`)
+  // console.log(resp)
+    return await resp.json();
+}
 
 async function handlerAutors(input) {
     if (typeof input === "string") {
@@ -69,11 +74,23 @@ async function handlerAutors(input) {
         try {
             const inputData = await getAutorInfo(urlFantlab, input)
             console.log(`Информация об авторе ${inputData.name}`)
-            console.log(inputData)
+            console.log(inputData.anons)
+           //  console.log(inputData.biography)
         } catch (error) {
             console.error(error)
         }
         
+    }
+}
+
+async function handlerBook(input) {
+    if (typeof input === "number") {
+        try {
+        const data = await getAutorBooks(urlFantlab, input)
+        console.log(data.works_blocks)    
+        } catch (error) {
+            console.error(error)
+        }
     }
 }
 
@@ -101,7 +118,8 @@ async function start() {
             await handlerAutors(id)
             break;
         case "4":
-            console.log("4. Вывод списква книг автора по id на Fantlab")
+            id = Number(await readLine.question("Введите id автора для поиска книг\n"));
+            await handlerBook(id)
             break;
         case "0":
             hi()
